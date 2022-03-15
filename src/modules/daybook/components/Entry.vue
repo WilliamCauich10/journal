@@ -1,24 +1,52 @@
 <template>
   <div
     class="entry-container mb-3 pointer p-2"
-    @click="$router.push({ name: 'entry', params: { id: 10 }})"
+    @click="$router.push({ name: 'entry', params: { id: entry.id }})"
     >
         <!-- Titulo -->
         <div class="entry-title d-flex">
-            <span class="text-success fs-5 fw-bold">15</span>
-            <span class="ms-1 fs-5">Julio</span>
-            <span class="mx-2 fw-light">2021, jueves</span>
+            <span class="text-success fs-5 fw-bold">{{ day }}</span>
+            <span class="ms-1 fs-5">{{ month }}</span>
+            <span class="mx-2 fw-light">{{ yerarDay }}</span>
         </div>
 
         <div class="entry-description">
-            Sit velit ullamco deserunt est irure. Labore laborum eiusmod deserunt in aute ea et aute enim duis mollit ut quis mollit. Amet nisi eiusmod enim excepteur officia exercitation. Occaecat veniam aliquip mollit in elit minim veniam. Pariatur eiusmod dolor sint officia sunt nisi proident reprehenderit do ea qui.
+            {{ shortText }}
         </div>
   </div>
 </template>
 
 <script>
-export default {
+const months = ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio','Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre']
+const days   = ['Domingo','Lunes','Martes','Miércoles','Jueves','Viernes','Sábado']
 
+
+export default {
+    props: {
+        entry:{
+            type: Object,
+            required: true
+        }
+    },
+    computed: {
+        shortText(){
+            return ( this.entry.text.length > 130 )
+                ? this.entry.text.substring(0,130) + '...'
+                : this.entry.text
+        },
+        day() {
+            const date = new Date( this.entry.date)
+            return date.getDate();
+        },
+        month(){
+            const date = new Date( this.entry.date)
+            return months[ date.getMonth() ]
+        },
+        yerarDay(){
+            const date = new Date( this.entry.date)
+            return `${ date.getFullYear() }, ${ days[ date.getDay() ] }`
+        }
+    }
 }
 </script>
 
